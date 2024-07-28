@@ -20,7 +20,7 @@ zhipuai_api_key = os.environ['ZHIPUAI_API_KEY']
 
 
 def generate_response(input_text, zhipuai_api_key):
-    llm = ZhipuAI(zhipuai_api_key=zhipuai_api_key)
+    llm = ZhipuAI(model_name = "glm-4", temperature = 0,zhipuai_api_key=zhipuai_api_key)
     output = llm.invoke(input_text)
     output_parser = StrOutputParser()
     output = output_parser.invoke(output)
