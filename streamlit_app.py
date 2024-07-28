@@ -57,7 +57,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
         model="glm-4",
         temperature=0.7, 
         openai_api_key=openai_api_key,
-        openai_api_base = "https://open.bigmodel.cn/api/paas/v4/chat/completions")
+        openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
     memory = ConversationBufferMemory(
         memory_key="chat_history",  # 与 prompt 的输入变量保持一致。
         return_messages=True  # 将以消息列表的形式返回聊天记录，而不是单个字符串
@@ -78,7 +78,7 @@ def get_qa_chain(question:str,openai_api_key:str):
         model="glm-4",
         temperature=0.7, 
         openai_api_key=openai_api_key,
-        openai_api_base = "https://open.bigmodel.cn/api/paas/v4/chat/completions")
+        openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
     template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
         案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
         {context}
