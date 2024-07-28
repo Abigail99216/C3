@@ -1,5 +1,5 @@
 import streamlit as st
-from langchain_openai import ChatZhipuAI
+from langchain_community.chat_models import ChatZhipuAI
 import os
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
