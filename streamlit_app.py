@@ -29,7 +29,7 @@ def generate_response(input_text, openai_api_key):
         model="glm-4",
         temperature=0.7, 
         openai_api_key=openai_api_key,
-        openai_api_base = "https://open.bigmodel.cn/api/paas/v4/chat/completions")
+        openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
     output = llm.invoke(input_text)
     output_parser = StrOutputParser()
     output = output_parser.invoke(output)
