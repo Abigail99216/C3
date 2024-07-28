@@ -84,7 +84,7 @@ def get_qa_chain(question:str,openai_api_key:str):
         {context}
         问题: {question}
         """
-    QA_CHAIN_PROMPT = ChatPromptTemplate(input_variables=["context","question"])
+    QA_CHAIN_PROMPT = ChatPromptTemplate(input_variables=["context","question"], template = template)
     qa_chain = RetrievalQA.from_chain_type(llm,
                                        retriever=vectordb.as_retriever(),
                                        return_source_documents=True,
