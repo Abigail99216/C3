@@ -86,6 +86,7 @@ def get_qa_chain(question:str,openai_api_key:str):
                                            return_source_documents=True,
                                            chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
+    st.info(vectordb)
     return result["result"]
 
 
