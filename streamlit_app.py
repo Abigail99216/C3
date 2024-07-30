@@ -81,9 +81,9 @@ def get_qa_chain(question:str,openai_api_key:str):
         """
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"], template=template)
     qa_chain = RetrievalQA.from_chain_type(llm,
-                                       retriever=vectordb.as_retriever(),
-                                       return_source_documents=True,
-                                       chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
+                                           retriever=vectordb.as_retriever(),
+                                           return_source_documents=True,
+                                           chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
     return result["result"]
 
