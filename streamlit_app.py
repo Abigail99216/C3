@@ -69,6 +69,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
 #不带历史记录的问答链
 def get_qa_chain(question:str,openai_api_key:str):
     vectordb = get_vectordb()
+    retriever=vectordb.as_retriever()
     llm = ChatOpenAI(
         model="glm-4",
         temperature=0.7, 
@@ -81,7 +82,7 @@ def get_qa_chain(question:str,openai_api_key:str):
         """
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"], template=template)
     qa_chain = RetrievalQA.from_chain_type(llm,
-                                           retriever=vectordb.as_retriever(),
+                                           retriever=retriever,
                                            return_source_documents=True,
                                            chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
