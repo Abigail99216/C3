@@ -3,12 +3,7 @@ import streamlit as st
 from langchain_openai import ChatOpenAI
 import os
 from langchain_core.output_parsers import StrOutputParser
-from langchain.prompts import (
-    ChatPromptTemplate,
-    MessagesPlaceholder,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
+from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA, LLMChain
 import sys
 sys.path.append("../C3 搭建知识库") # 将父目录放入系统路径中
@@ -79,12 +74,12 @@ def get_qa_chain(question:str,openai_api_key:str):
         temperature=0.7, 
         openai_api_key=openai_api_key,
         openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
-    template = "使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。"
-    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
-    human_template = {question}
-    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
-    QA_CHAIN_PROMPT = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
-
+    template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
+        案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
+       {context}
+        问题: {question}
+        """
+    QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"], template=template)
     qa_chain = RetrievalQA.from_chain_type(llm,
                                        retriever=vectordb.as_retriever(),
                                        return_source_documents=True,
