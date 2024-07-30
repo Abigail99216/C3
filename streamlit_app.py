@@ -79,15 +79,12 @@ def get_qa_chain(question:str,openai_api_key:str):
         temperature=0.7, 
         openai_api_key=openai_api_key,
         openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
-    template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
-        案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
-        {context}
-        问题: {question}
-        """
-    QA_CHAIN_PROMPT = ChatPromptTemplate([
-        ("system", "{context}"),
-        ("human", "{question}"),
-   ])
+    template = "使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。"
+        system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+        human_template = {question}
+        human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+        QA_CHAIN_PROMPT = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
+
     qa_chain = RetrievalQA.from_chain_type(llm,
                                        retriever=vectordb.as_retriever(),
                                        return_source_documents=True,
