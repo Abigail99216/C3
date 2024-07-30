@@ -23,7 +23,7 @@ zhipuai_api_key = os.environ['ZHIPUAI_API_KEY']
 
 def generate_response(input_text, openai_api_key):
     llm = ChatOpenAI(
-        model="glm-4",
+        model="glm-3-turbo",
         temperature=0.7, 
         openai_api_key=openai_api_key,
         openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
@@ -49,7 +49,7 @@ def get_vectordb():
 def get_chat_qa_chain(question:str,openai_api_key:str):
     vectordb = get_vectordb()
     llm = ChatOpenAI(
-        model="glm-4",
+        model="glm-3-turbo",
         temperature=0.7, 
         openai_api_key=openai_api_key,
         openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
@@ -70,7 +70,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
 def get_qa_chain(question:str,openai_api_key:str):
     vectordb = get_vectordb()
     llm = ChatOpenAI(
-        model="glm-4",
+        model="glm-3-turbo",
         temperature=0.7, 
         openai_api_key=openai_api_key,
         openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
