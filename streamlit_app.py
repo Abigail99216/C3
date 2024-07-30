@@ -47,6 +47,7 @@ def get_vectordb():
 
 #带有历史记录的问答链
 def get_chat_qa_chain(question:str,openai_api_key:str):
+    vectordb = get_vectordb()
     llm = ChatOpenAI(
         model="glm-4",
         temperature=0.7, 
