@@ -89,7 +89,7 @@ def get_qa_chain(question:str,openai_api_key:str):
                                            chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
     st.info(vectordb)
-    return result["result"]
+    return result["answer"]
 
 
 # Streamlit 应用程序界面
