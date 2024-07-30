@@ -30,7 +30,7 @@ def generate_response(input_text, openai_api_key):
     output = llm.invoke(input_text)
     output_parser = StrOutputParser()
     output = output_parser.invoke(output)
-    #st.info(output)
+    st.info(output)
     return output
 
 def get_vectordb():
