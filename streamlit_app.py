@@ -64,6 +64,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
         memory=memory
     )
     result = qa({"question": question})
+    st.info(vectordb)
     return result['answer']
 
 #不带历史记录的问答链
