@@ -84,7 +84,7 @@ def get_qa_chain(question:str,openai_api_key:str):
     retriever=vectordb.as_retriever()
     qa_chain = RetrievalQA.from_chain_type(llm,
                                            retriever=retriever,
-                                           chain_type="map_reduce",
+                                           chain_type="stuff",
                                            return_source_documents=True,
                                            chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
