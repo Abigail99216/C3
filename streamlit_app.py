@@ -46,8 +46,8 @@ def get_vectordb():
     return vectordb
 
 #带有历史记录的问答链
-def get_chat_qa_chain(question:str,openai_api_key:str):
-    vectordb = get_vectordb()
+def get_chat_qa_chain(question:str,openai_api_key:str, vectordb):
+    #vectordb = get_vectordb()
     llm = ChatOpenAI(
         model="glm-4",
         temperature=0.7, 
@@ -113,7 +113,7 @@ def main():
             # 调用 respond 函数获取回答
             answer = generate_response(prompt, openai_api_key)
         elif selected_method == "qa_chain":
-            answer = get_qa_chain(prompt,openai_api_key)
+            answer = get_qa_chain(prompt,openai_api_key,vectordb)
         elif selected_method == "chat_qa_chain":
             answer = get_chat_qa_chain(prompt,openai_api_key)
 
