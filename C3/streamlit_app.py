@@ -41,6 +41,7 @@ def get_vectordb():
     vectordb = Chroma(
             persist_directory=persist_directory,  # 允许我们将persist_directory目录保存到磁盘上
             embedding_function=embedding)
+    return vectordb
 
 #带有历史记录的问答链
 def get_chat_qa_chain(question:str,openai_api_key:str):
