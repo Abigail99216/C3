@@ -1,3 +1,4 @@
+__import__('pysqlite3')
 import streamlit as st
 from langchain_openai import ChatOpenAI
 import os
