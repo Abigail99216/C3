@@ -30,7 +30,6 @@ def generate_response(input_text, openai_api_key):
     output = llm.invoke(input_text)
     output_parser = StrOutputParser()
     output = output_parser.invoke(output)
-    st.info(output)
     return output
 
 def get_vectordb():
@@ -57,10 +56,9 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
         memory_key="chat_history",  # 与 prompt 的输入变量保持一致。
         return_messages=True  # 将以消息列表的形式返回聊天记录，而不是单个字符串
     )
-    retriever=vectordb.as_retriever()
     qa = ConversationalRetrievalChain.from_llm(
         llm,
-        retriever=retriever,
+        retriever=vectordb.as_retriever(),
         memory=memory
     )
     result = qa({"question": question})
@@ -80,10 +78,8 @@ def get_qa_chain(question:str,openai_api_key:str):
         问题: {question}
         """
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"], template=template)
-    retriever=vectordb.as_retriever()
     qa_chain = RetrievalQA.from_chain_type(llm,
-                                           retriever=retriever,
-                                           chain_type="stuff",
+                                           retriever=vectordb.as_retriever(),
                                            return_source_documents=True,
                                            chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
