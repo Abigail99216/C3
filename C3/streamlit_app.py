@@ -41,7 +41,7 @@ def get_vectordb():
     # 加载数据库
         vectordb = Chroma(
             persist_directory=persist_directory,  # 允许我们将persist_directory目录保存到磁盘上
-            embedding=embedding
+            embedding_function=embedding
         )
         if not vectordb:
             raise ValueError("向量数据库加载失败或为空")
