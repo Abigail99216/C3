@@ -1,4 +1,3 @@
-__import__('pysqlite3')
 import streamlit as st
 from langchain_openai import ChatOpenAI
 import os
@@ -7,7 +6,6 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA, LLMChain
 import sys
 sys.path.append("../C3-") # 将父目录放入系统路径中
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 from zhipuai_embedding import ZhipuAIEmbeddings
 from langchain.vectorstores.chroma import Chroma
 from langchain.memory import ConversationBufferMemory
@@ -59,7 +57,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
     retriever=vectordb.as_retriever()
     qa = ConversationalRetrievalChain.from_llm(
         llm,
-        retriever=vectordb.as_retriever(),
+        retriever=retriever,
         memory=memory
     )
     result = qa({"question": question})
