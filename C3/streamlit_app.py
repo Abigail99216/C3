@@ -33,22 +33,32 @@ def generate_response(input_text, openai_api_key):
     return output
 
 def get_vectordb():
+    try:
     # 定义 Embeddings
-    embedding = ZhipuAIEmbeddings()
+        embedding = ZhipuAIEmbeddings()
     # 向量数据库持久化路径
-    persist_directory = '..C3/data_base/vector_db/chroma'
+        persist_directory = '..C3/data_base/vector_db/chroma'
     # 加载数据库
-    vectordb = Chroma(
-        persist_directory=persist_directory,  # 允许我们将persist_directory目录保存到磁盘上
-        embedding_function=embedding
-    )
-    if not vectordb:
-        raise ValueError("向量数据库加载失败或为空")
-    return vectordb
+        vectordb = Chroma(
+            persist_directory=persist_directory,  # 允许我们将persist_directory目录保存到磁盘上
+            embedding_function=embedding
+        )
+        if not vectordb:
+            raise ValueError("向量数据库加载失败或为空")
+        #检查数据库是否为空
+        if len(vectordb) == 0:
+            raise ValueError("向量数据库为空")
+        return vectordb
+    except Exception as e:
+        print(f"Error loading vector database: {e}")
+        return None
 
 #带有历史记录的问答链
 def get_chat_qa_chain(question:str,openai_api_key:str):
     vectordb = get_vectordb()
+    if vectordb is None:
+        print("向量数据库加载失败")
+        return "向量数据库加载失败"
     llm = ChatOpenAI(
         model="glm-3-turbo",
         temperature=0.7, 
