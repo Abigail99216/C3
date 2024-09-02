@@ -1,4 +1,4 @@
-#__import__('pysqlite3')
+__import__('pysqlite3')
 import streamlit as st
 from langchain_openai import ChatOpenAI
 import os
@@ -59,7 +59,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
     retriever=vectordb.as_retriever()
     qa = ConversationalRetrievalChain.from_llm(
         llm,
-        retriever=retriever,
+        retriever=vectordb.as_retriever(),
         memory=memory
     )
     result = qa({"question": question})
@@ -79,7 +79,7 @@ def get_qa_chain(question:str,openai_api_key:str):
         问题: {question}
         """
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"], template=template)
-    retriever=vectordb.as_retriever(),
+    retriever=vectordb.as_retriever()
     qa_chain = RetrievalQA.from_chain_type(llm,
                                            retriever=retriever,
                                            return_source_documents=True,
