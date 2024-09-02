@@ -64,8 +64,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
         memory=memory
     )
     result = qa({"question": question})
-    st.info(vectordb)
-    return result['result']
+    return result['answer']
 
 #不带历史记录的问答链
 def get_qa_chain(question:str,openai_api_key:str):
@@ -88,13 +87,12 @@ def get_qa_chain(question:str,openai_api_key:str):
                                            return_source_documents=True,
                                            chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
-    st.info(vectordb)
-    return result["answer"]
+    return result["result"]
 
 
 # Streamlit 应用程序界面
 def main():
-    st.title('🦜🔗 动手学大模型应用开发')
+    st.title('🦜大模型应用')
     openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 
     # 添加一个选择按钮来选择不同的模型
