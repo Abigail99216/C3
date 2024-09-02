@@ -56,9 +56,6 @@ def get_vectordb():
 #带有历史记录的问答链
 def get_chat_qa_chain(question:str,openai_api_key:str):
     vectordb = get_vectordb()
-    if vectordb is None:
-        print("向量数据库加载失败")
-        return "向量数据库加载失败"
     llm = ChatOpenAI(
         model="glm-3-turbo",
         temperature=0.7, 
