@@ -6,7 +6,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA, LLMChain
 import sys
-sys.path.append("../C3") # 将父目录放入系统路径中
+sys.path.append("../C3-") # 将父目录放入系统路径中
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 from zhipuai_embedding import ZhipuAIEmbeddings
 from langchain.vectorstores.chroma import Chroma
@@ -30,24 +30,23 @@ def generate_response(input_text, openai_api_key):
     output = llm.invoke(input_text)
     output_parser = StrOutputParser()
     output = output_parser.invoke(output)
+    #st.info(output)
     return output
 
 def get_vectordb():
     # 定义 Embeddings
     embedding = ZhipuAIEmbeddings()
     # 向量数据库持久化路径
-    persist_directory = '../data_base/vector_db/chroma'
+    persist_directory = '../C3-/data_base/vector_db/chroma'
     # 加载数据库
     vectordb = Chroma(
         persist_directory=persist_directory,  # 允许我们将persist_directory目录保存到磁盘上
         embedding_function=embedding
     )
-    if not vectordb:
-        raise ValueError("向量数据库加载失败或为空")
     return vectordb
 
 #带有历史记录的问答链
-def get_chat_qa_chain(question:str,openai_api_key:str):
+def get_chat_qa_chain(question:str, openai_api_key:str):
     vectordb = get_vectordb()
     llm = ChatOpenAI(
         model="glm-3-turbo",
@@ -58,7 +57,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
         memory_key="chat_history",  # 与 prompt 的输入变量保持一致。
         return_messages=True  # 将以消息列表的形式返回聊天记录，而不是单个字符串
     )
-    retriever=vectordb.as_retriever()
+    retriever = vectordb.as_retriever()
     qa = ConversationalRetrievalChain.from_llm(
         llm,
         retriever=retriever,
@@ -68,7 +67,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
     return result['answer']
 
 #不带历史记录的问答链
-def get_qa_chain(question:str,openai_api_key:str):
+def get_qa_chain(question:str, openai_api_key:str):
     vectordb = get_vectordb()
     llm = ChatOpenAI(
         model="glm-3-turbo",
@@ -76,22 +75,21 @@ def get_qa_chain(question:str,openai_api_key:str):
         openai_api_key=openai_api_key,
         openai_api_base = "https://open.bigmodel.cn/api/paas/v4/")
     template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
-        案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
-       {context}
-        问题: {question}
-        """
+        案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。"""
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"], template=template)
+    retriever = vectordb.as_retriever()
     qa_chain = RetrievalQA.from_chain_type(llm,
-                                           retriever=vectordb.as_retriever(),
+                                           retriever=retriever,
                                            return_source_documents=True,
-                                           chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
+                                           chain_type_kwargs={"prompt": QA_CHAIN_PROMPT})
     result = qa_chain({"query": question})
+    st.info(vectordb)
     return result["result"]
 
 
 # Streamlit 应用程序界面
 def main():
-    st.title('🦜大模型应用')
+    st.title('🦜🔗 动手学大模型应用开发')
     openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 
     # 添加一个选择按钮来选择不同的模型
@@ -114,9 +112,9 @@ def main():
             # 调用 respond 函数获取回答
             answer = generate_response(prompt, openai_api_key)
         elif selected_method == "qa_chain":
-            answer = get_qa_chain(prompt,openai_api_key)
+            answer = get_qa_chain(prompt, openai_api_key)
         elif selected_method == "chat_qa_chain":
-            answer = get_chat_qa_chain(prompt,openai_api_key)
+            answer = get_chat_qa_chain(prompt, openai_api_key)
 
         # 检查回答是否为 None
         if answer is not None:
