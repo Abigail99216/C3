@@ -42,6 +42,8 @@ def get_vectordb():
         persist_directory=persist_directory,  # 允许我们将persist_directory目录保存到磁盘上
         embedding_function=embedding
     )
+    if not vectordb:
+        raise ValueError("向量数据库加载失败或为空")
     return vectordb
 
 #带有历史记录的问答链
