@@ -64,7 +64,7 @@ def get_chat_qa_chain(question:str,openai_api_key:str):
         retriever=retriever,
         memory=memory
     )
-    result = qa({"query": question})
+    result = qa({"question": question})
     return result['answer']
 
 #不带历史记录的问答链
